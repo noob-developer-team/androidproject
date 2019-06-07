@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://192.168.168.9:8181/HelloWorld/Text.php";
+                String url = "http://192.168.168.9:8181/androidToMySQL/Text.php";
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
