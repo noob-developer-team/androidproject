@@ -1,11 +1,18 @@
 package com.example.assignment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,17 +26,32 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final TextView txtsignup;
+        final CheckBox showpass;
+        final EditText txtusr,txtpass;
+        final Button btnlogin;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final EditText txtUsername = findViewById(R.id.txtUsername);
-        final EditText txtPassword = findViewById(R.id.txtPassword);
-        Button btnLogin = findViewById(R.id.btnLogin);
+        txtsignup = findViewById(R.id.txtsignup);
+        showpass = findViewById(R.id.checkboxshowwpass);
+        btnlogin = findViewById(R.id.buttonlogin);
+        txtusr = findViewById(R.id.txtusername);
+        txtpass= findViewById(R.id.txtpassword);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        txtsignup.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String url = "http://192.168.168.9:8181/androidToMySQL/Text.php";
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,studentSignupPage.class);
+                startActivity(intent);
+            }
+        });
+
+        btnlogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = "http://192.168.43.60:9090/androidToMySQL/Text.php";
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -52,14 +74,26 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     protected Map<String, String> getParams(){
                         Map<String, String> params = new HashMap<>();
-                        params.put("username", txtUsername.getText().toString());
-                        params.put("password", txtPassword.getText().toString());
+                        params.put("username", txtusr.getText().toString());
+                        params.put("password", txtpass.getText().toString());
                         return params;
                     }
                 };
                 MySingleton.getInstance(getApplicationContext()).addToRequestQueue(stringRequest);
             }
         });
-//        MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest);
+        showpass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked){
+                    txtpass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                else {
+                    txtpass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                }
+            }
+        });
+
     }
+
 }
