@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://192.168.168.9:8181/androidToMySQL/Text.php";
+                String url = "http://192.168.0.130:8080/users";
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         else
                         {
-                            Toast.makeText(getApplicationContext(), "SHIT", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener(){
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                     protected Map<String, String> getParams(){
                         Map<String, String> params = new HashMap<>();
                         params.put("username", txtUsername.getText().toString());
-                        params.put("password", txtPassword.getText().toString());
                         return params;
                     }
                 };
