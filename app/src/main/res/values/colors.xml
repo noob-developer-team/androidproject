@@ -5,4 +5,6 @@
     <color name="colorAccent">#1976D2</color>
     <color name="customColor1">#536980</color>
     <color name="customColor2">#1976D2</color>
+    <color name="semi_transparent">#66000000</color>
+    <color name="full_transparent">#00000000</color>
 </resources>

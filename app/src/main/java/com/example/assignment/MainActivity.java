@@ -51,13 +51,16 @@ public class MainActivity extends AppCompatActivity {
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://192.168.43.60:9090/androidToMySQL/Text.php";
+                String url = "http://192.168.1.8:9090/androidToMySQL/Text.php";
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if(response.contains("success_login"))
                         {
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(MainActivity.this,ScrollingActivity.class);
+                            startActivity(intent);
+
                         }
                         else
                         {

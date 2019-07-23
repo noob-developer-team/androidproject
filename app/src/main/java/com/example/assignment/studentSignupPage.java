@@ -1,5 +1,6 @@
 package com.example.assignment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,19 +36,21 @@ public class studentSignupPage extends AppCompatActivity {
         btnsignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://192.168.43.60:9090/androidToMySQL/insert.php";
+                String url = "http://192.168.1.8:9090/androidToMySQL/insert.php";
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if(response.contains("failed"))
                         {
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
+
                         }
                         else
                         {
                             Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+
                         }
-                    }
+                        }
                 }, new Response.ErrorListener(){
                     @Override
                     public void onErrorResponse(VolleyError error)

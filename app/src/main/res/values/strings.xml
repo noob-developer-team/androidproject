@@ -8,4 +8,21 @@
     <string name="signuptext">SIGN UP</string>
     <string name="email">Email</string>
     <string name="phonenumber">Phone Number</string>
+    <string name="title_activity_scrolling">Profile</string>
+    <string name="action_settings">Settings</string>
+    <string name="studentID">UPS09160006</string>
+    <string name="major">IT Programming</string>
+    <string name="studentname">Nom Sokheng</string>
+    <string name="today">Today</string>
+    <string name="subject">Subject</string>
+    <string name="Class">Class</string>
+    <string name="lastsemester">Last Semester</string>
+    <string name="math">Math for Computer</string>
+    <string name="web">Dynamic Web Application</string>
+    <string name="php">PHP Framework or PHP/MySQL</string>
+    <string name="projectanalysis">Project Analysis and Design</string>
+    <string name="oracle">Oracle Essential DBA</string>
+    <string name="android">Mobile Application and Development (Android)</string>
+    <string name="Todaystring">Today</string>
+
 </resources>
