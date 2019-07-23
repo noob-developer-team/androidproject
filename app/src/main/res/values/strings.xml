@@ -24,5 +24,11 @@
     <string name="oracle">Oracle Essential DBA</string>
     <string name="android">Mobile Application and Development (Android)</string>
     <string name="Todaystring">Today</string>
+    <string name="semesterbtn">ALL SEMESTERS</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_home">Schedule</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_setting">Settings</string>
+    <string name="Schedule">Schedule</string>
 
 </resources>

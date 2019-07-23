@@ -2,6 +2,7 @@ package com.example.assignment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
@@ -51,20 +52,22 @@ public class MainActivity extends AppCompatActivity {
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String url = "http://192.168.1.8:9090/androidToMySQL/Text.php";
+                String url = "http://192.168.1.6:9090/androidToMySQL/Text.php";
+
                 StringRequest stringRequest = new StringRequest(Request.Method.POST,url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         if(response.contains("success_login"))
                         {
                             Toast.makeText(getApplicationContext(), response, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(MainActivity.this,ScrollingActivity.class);
+                            Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                             startActivity(intent);
 
                         }
                         else
                         {
                             Toast.makeText(getApplicationContext(), "SHIT", Toast.LENGTH_SHORT).show();
+
                         }
                     }
                 }, new Response.ErrorListener(){
@@ -96,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
 
     }
 

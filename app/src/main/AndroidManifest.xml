@@ -12,11 +12,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Custom4"/>
+        <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/Custom3"
-
-            ></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/Custom3" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -29,7 +32,7 @@
         <activity
             android:name=".studentSignupPage"
             android:screenOrientation="portrait"
-            android:theme="@style/Custom2"></activity>
+            android:theme="@style/Custom2" />
     </application>
 
 </manifest>
