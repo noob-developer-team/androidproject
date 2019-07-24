@@ -27,7 +27,12 @@ import java.util.List;
 
 public class ScheduleActivity extends Fragment implements DatePickerDialog.OnDateSetListener {
     View v;
-    private RecyclerView myrecyclerview,myrecyclerview2;
+    DatePickerDialog datePickerDialog;
+    int year;
+    int month;
+    Calendar calendar;
+    int dayofMonth;
+    private RecyclerView myrecyclerview, myrecyclerview2;
     private List<DMY> isDMY;
     private ImageButton btncalendar;
     private TextView testcal;
@@ -36,63 +41,58 @@ public class ScheduleActivity extends Fragment implements DatePickerDialog.OnDat
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-           v= inflater.inflate(R.layout.activity_schedule, container, false);
-           myrecyclerview = (RecyclerView) v.findViewById(R.id.recycler_id);
-           myrecyclerview2 = (RecyclerView) v.findViewById(R.id.recycler_id2);
+        v = inflater.inflate(R.layout.activity_schedule, container, false);
+        myrecyclerview = (RecyclerView) v.findViewById(R.id.recycler_id);
+        myrecyclerview2 = (RecyclerView) v.findViewById(R.id.recycler_id2);
+        testcal = (TextView) v.findViewById(R.id.test_calendartxt);
+
+        v.findViewById(R.id.btn_calendar).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendar = Calendar.getInstance();
+                year = calendar.get(Calendar.YEAR);
+                month = calendar.get(Calendar.MONTH);
+                dayofMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                datePickerDialog = new DatePickerDialog(ScheduleActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        testcal.setText(dayOfMonth+"/"+month+"/"+year);
+                    }
+                },year,month,dayofMonth);
+                        datePickerDialog.show();
+            }
+        });
 
 
-            testcal = (TextView)v.findViewById(R.id.test_calendartxt);
-            btncalendar = (ImageButton) v.findViewById(R.id.btn_calendar);
-             btncalendar.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     DialogFragment datepicker = new Datepicker();
-                     datepicker.show(getFragmentManager(),"Date Picker");
-                 }
-             });
+        RecyclerVadapater recyclerVadapater = new RecyclerVadapater(getContext(), isDMY);
+        RecyclerVadapater2 recyclerVadapater2 = new RecyclerVadapater2(getContext(), isDMY);
 
+        myrecyclerview.setAdapter(recyclerVadapater);
+        myrecyclerview2.setAdapter(recyclerVadapater2);
 
-           RecyclerVadapater recyclerVadapater = new RecyclerVadapater(getContext(),isDMY);
-            RecyclerVadapater2 recyclerVadapater2 = new RecyclerVadapater2(getContext(),isDMY);
+        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        myrecyclerview2.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-           myrecyclerview.setAdapter(recyclerVadapater);
-           myrecyclerview2.setAdapter(recyclerVadapater2);
-
-           myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
-           myrecyclerview2.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-           return v;
+        return v;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isDMY = new ArrayList<>();
-        isDMY.add(new DMY("Monday","21"));
-        isDMY.add(new DMY("Tuesday","21"));
-        isDMY.add(new DMY("Wednesday","21"));
-        isDMY.add(new DMY("Thursday","21"));
-        isDMY.add(new DMY("Friday","21"));
-        isDMY.add(new DMY("Saturday","21"));
-        isDMY.add(new DMY("Monday","21"));
-        isDMY.add(new DMY("Tuesday","21"));
-        isDMY.add(new DMY("Wednesday","21"));
-        isDMY.add(new DMY("Thursday","21"));
-        isDMY.add(new DMY("Friday","21"));
-        isDMY.add(new DMY("Saturday","21"));
-
+        isDMY.add(new DMY("Monday", "21"));
+        isDMY.add(new DMY("Tuesday", "21"));
+        isDMY.add(new DMY("Wednesday", "21"));
+        isDMY.add(new DMY("Thursday", "21"));
+        isDMY.add(new DMY("Friday", "21"));
+        isDMY.add(new DMY("Saturday", "21"));
+        isDMY.add(new DMY("Monday", "21"));
+        isDMY.add(new DMY("Tuesday", "21"));
+        isDMY.add(new DMY("Wednesday", "21"));
+        isDMY.add(new DMY("Thursday", "21"));
+        isDMY.add(new DMY("Friday", "21"));
+        isDMY.add(new DMY("Saturday", "21"));
 
 
     }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR,year);
-        c.set(Calendar.MONTH,month);
-        c.set(Calendar.DATE,dayOfMonth);
-        String currentDate = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-        testcal.setText(currentDate);
-    }
-
 }
