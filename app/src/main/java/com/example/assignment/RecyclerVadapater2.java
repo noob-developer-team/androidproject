@@ -9,14 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.assignment.Model.Schedule;
+
 import java.util.List;
 
 public class RecyclerVadapater2 extends RecyclerView.Adapter<RecyclerVadapater2.MyViewHolder> {
 
     private Context mContext;
-    private List<DMY> mData;
+    private List<Schedule> mData;
 
-    public RecyclerVadapater2(Context mContext, List<DMY> mData) {
+    public RecyclerVadapater2(Context mContext, List<Schedule> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -32,8 +34,8 @@ public class RecyclerVadapater2 extends RecyclerView.Adapter<RecyclerVadapater2.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.txtday.setText(mData.get(position).getDay());
-        holder.txtdate.setText(mData.get(position).getMonth());
+        holder.txtday.setText(mData.get(position).getRoomName());
+        holder.txtdate.setText(mData.get(position).getSubjectName());
 
     }
 
@@ -48,8 +50,8 @@ public class RecyclerVadapater2 extends RecyclerView.Adapter<RecyclerVadapater2.
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-           txtday = (TextView) itemView.findViewById(R.id.txt_day);
-            txtdate = (TextView) itemView.findViewById(R.id.txt_date);
+           txtday = itemView.findViewById(R.id.txt_day);
+            txtdate = itemView.findViewById(R.id.txt_date);
         }
     }
 }

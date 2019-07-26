@@ -18,6 +18,6 @@ public class Datepicker extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        return new DatePickerDialog(getActivity(),(DatePickerDialog.OnDateSetListener)getActivity(),year,month,day);
+        return new DatePickerDialog(getContext(),(DatePickerDialog.OnDateSetListener)getActivity(),year,month,day);
     }
 }
