@@ -2,6 +2,7 @@ package com.example.assignment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -36,6 +37,18 @@ public class MainActivity extends AppCompatActivity {
     private List<User> addUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()   // or .detectAll() for all detectable problems
+                .penaltyLog()
+                .build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                .detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .penaltyDeath()
+                .build());
         final TextView textSignUp;
         final CheckBox showPassword;
         final EditText textUsername, textPassword;
@@ -62,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAllUser(textUsername.getText().toString(), textPassword.getText().toString());
+//                getAllUser(textUsername.getText().toString(), textPassword.getText().toString());
+                try {
+                    getAllUser();
+                } catch (IOException e) {
+                    Log.d("Error",e.getMessage());
+                }
                 if(!addUser.isEmpty())
                 {
                     Intent intent = new Intent(MainActivity.this,HomeActivity.class);
@@ -84,30 +102,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getAllUser(String username, String password){
+    private void getAllUser() throws IOException {
         RetrofitController retrofit = RetrofitInstance.getService();
 
-        Call<List<User>> call = retrofit.getUser(username, password);
-        call.enqueue(new Callback<List<User>>() {
-            @Override
-            public void onResponse(@Nullable Call<List<User>> call,@NonNull Response<List<User>> response) {
-                if (!response.isSuccessful()) {
-                    return;
-                }
-                List<User> users = response.body();
-                assert users != null;
-                for(User user: users){
-                    addUser = new ArrayList<>();
-                    addUser.add(user);
-                    userId  = user.getId();
-                }
-            }
+        Call<List<User>> call = retrofit.getUser("reach", "reach123");
 
-            @Override
-            public void onFailure(@Nullable Call<List<User>> call, @NonNull Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+         call.execute();
+
+//        call.enqueue(new Callback<List<User>>() {
+//            @Override
+//            public void onResponse( Call<List<User>> call,  Response<List<User>> response) {
+//                if (!response.isSuccessful()) {
+//                    return;
+//                }
+//                List<User> users = response.body();
+//                assert users != null;
+//                for (User user : users) {
+//                    addUser = new ArrayList<>();
+//                    addUser.add(user);
+//                    userId = user.getId();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure( Call<List<User>> call,  Throwable t) {
+//                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
-
 }
