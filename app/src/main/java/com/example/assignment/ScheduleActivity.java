@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.assignment.Controller.RetrofitController;
 import com.example.assignment.Controller.RetrofitInstance;
 import com.example.assignment.Model.Schedule;
+import com.example.assignment.Model.User;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -45,7 +49,8 @@ public class ScheduleActivity extends Fragment {
     private List<Schedule> schedules;
     private TextView textDateScheduleHeader;
     private TextView textViewDateScheduleHeader;
-    private String dayToChoose;
+
+    private ImageButton buttonCalendar;
     private String defaultTextScheduleHeader;
     private int userId;
     @SuppressLint("SimpleDateFormat")
@@ -57,7 +62,7 @@ public class ScheduleActivity extends Fragment {
     @SuppressLint("SimpleDateFormat")
     private final SimpleDateFormat fullFormat = new SimpleDateFormat("yyyy/MMM/dd");
     @SuppressLint("SimpleDateFormat")
-    private final SimpleDateFormat fullFormatMM = new SimpleDateFormat("yyyy-MM-dd");
+    private final SimpleDateFormat fullFormatMM = new SimpleDateFormat("yyyy/MM/dd");
     private Date date = new Date();
     @Nullable
     @Override
@@ -68,8 +73,8 @@ public class ScheduleActivity extends Fragment {
         textDateScheduleHeader = view.findViewById(R.id.test_calendartxt);
         textViewDateScheduleHeader = view.findViewById(R.id.txtDateHeader);
         defaultTextScheduleHeader = textDateScheduleHeader.getText().toString();
-        view.findViewById(R.id.btn_calendar);
-        view.setOnClickListener(new View.OnClickListener() {
+        buttonCalendar = (ImageButton) view.findViewById(R.id.btn_calendar);
+        buttonCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calendar = Calendar.getInstance();
@@ -80,22 +85,20 @@ public class ScheduleActivity extends Fragment {
                 datePickerDialog = new DatePickerDialog(Objects.requireNonNull(getContext()), new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        String dayToChoose;
                         dayToChoose = year + "/" + (month + 1) + "/" + dayOfMonth;
-                        Date d = null;
+                        String dateScheduleHeader;
                         try {
-                            d = fullFormatMM.parse(dayToChoose);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        try {
+                            Date d = fullFormatMM.parse(dayToChoose);
                             String dateSchedule;
                             dateSchedule = fullFormatMM.format(d);
                             getSchedule(userId, dateSchedule);
-                        } catch (Exception ex) {
-                            Log.v("Exception", ex.getLocalizedMessage());
+                            dateScheduleHeader = monthFormat.format(d);
+                            textViewDateScheduleHeader.setText(dateScheduleHeader);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                        String dateScheduleHeader = monthFormat.format(d);
-                        textViewDateScheduleHeader.setText(dateScheduleHeader);
+
                         if (!(dayFormat.format(date).equals(Integer.toString(dayOfMonth)))) {
                             textDateScheduleHeader.setText(dayToChoose);
                         } else {
@@ -151,29 +154,18 @@ public class ScheduleActivity extends Fragment {
 
     private void getSchedule(int userId, String date) {
         RetrofitController retrofit = RetrofitInstance.getService();
-        Call<List<Schedule>> call = retrofit.getSchedule(userId, date);
-        call.enqueue(new Callback<List<Schedule>>() {
-            @Override
-            public void onResponse(@Nullable Call<List<Schedule>> call, @NonNull Response<List<Schedule>> response) {
-                if (response.isSuccessful()) {
-                    schedules = response.body();
-                } else {
-                    Log.d("Error", response.message());
-                }
-            }
 
-            @Override
-            public void onFailure(@Nullable Call<List<Schedule>> call,@NonNull Throwable t) {
-                // something went completely south (like no internet connection)
-                Log.d("Error", t.getMessage());
-            }
-        });
         try {
-            schedules = call.execute().body();
-        }
-        catch (Exception e)
-        {
-            Log.d("Can't get list schedule!", e.getMessage());
+            Call<List<Schedule>> call = retrofit.getSchedule(userId, date);
+            Response<List<Schedule>> response = call.execute();
+            if (response != null && !response.isSuccessful() && response.errorBody() != null) {
+
+                return;
+            }
+            schedules = new ArrayList<>();
+            schedules = response.body();
+        } catch (IOException e) {
+            Log.d("Error", e.getMessage());
         }
 
     }

@@ -19,7 +19,7 @@ public class studentSignupPage extends AppCompatActivity {
         setContentView(R.layout.student_signup_page);
         txtname = findViewById(R.id.txt_name);
         txtpassword = findViewById(R.id.txt_password);
-        txtemail = findViewById(R.id.txt_email);
+//        txtemail = findViewById(R.id.txt_email);
         txtpid = findViewById(R.id.txt_phonenumber);
         btnsignup = findViewById(R.id.buttonsignup);
         btnback = findViewById(R.id.buttonback);

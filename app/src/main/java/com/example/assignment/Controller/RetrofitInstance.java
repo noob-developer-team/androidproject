@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
 
-    private final static String BASE_URL = "http://192.168.43.169:8181/androidToMySQL/";
+    private final static String BASE_URL = "http://192.168.0.173:8181/androidToMySQL/";
     private static Retrofit retrofit = null;
 
     public static RetrofitController getService(){

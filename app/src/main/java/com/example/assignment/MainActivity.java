@@ -3,6 +3,7 @@ package com.example.assignment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Annotation;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -34,21 +35,27 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
 
     public static int userId;
-    private List<User> addUser;
+    private List<User> listUsers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskWrites()
-                .detectNetwork()   // or .detectAll() for all detectable problems
-                .penaltyLog()
-                .build());
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-                .detectLeakedSqlLiteObjects()
-                .detectLeakedClosableObjects()
-                .penaltyLog()
-                .penaltyDeath()
-                .build());
+//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+//                .detectDiskReads()
+//                .detectDiskWrites()
+//                .detectNetwork()   // or .detectAll() for all detectable problems
+//                .penaltyLog()
+//                .build());
+//        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+//                .detectLeakedSqlLiteObjects()
+//                .detectLeakedClosableObjects()
+//                .penaltyLog()
+//                .penaltyDeath()
+//                .build());
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         final TextView textSignUp;
         final CheckBox showPassword;
         final EditText textUsername, textPassword;
@@ -75,13 +82,16 @@ public class MainActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getAllUser(textUsername.getText().toString(), textPassword.getText().toString());
+
                 try {
-                    getAllUser();
+                    getAllUser(textUsername.getText().toString(), textPassword.getText().toString());
+                    for(User user: listUsers){
+                        userId = user.getId();
+                    }
                 } catch (IOException e) {
                     Log.d("Error",e.getMessage());
                 }
-                if(!addUser.isEmpty())
+                if(!listUsers.isEmpty())
                 {
                     Intent intent = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(intent);
@@ -102,13 +112,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void getAllUser() throws IOException {
+    private void getAllUser(String username, String password) throws IOException {
         RetrofitController retrofit = RetrofitInstance.getService();
+        try {
+            Call<List<User>> call = retrofit.getUser(username, password);
+            Response<List<User>> response = call.execute();
+            if (response != null && !response.isSuccessful() && response.errorBody() != null) {
 
-        Call<List<User>> call = retrofit.getUser("reach", "reach123");
-
-         call.execute();
-
+                return;
+            }
+            listUsers = response.body();
+        } catch (IOException e) {
+            Log.d("Error", e.getMessage());
+        }
 //        call.enqueue(new Callback<List<User>>() {
 //            @Override
 //            public void onResponse( Call<List<User>> call,  Response<List<User>> response) {
